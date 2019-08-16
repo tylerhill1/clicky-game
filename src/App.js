@@ -4,7 +4,10 @@ import Wrapper from "./components/Wrapper";
 import Title from "./components/Title";
 import friends from "./friends.json";
 
+
 class App extends Component {
+
+
   // Setting this.state.friends to the friends json array
   state = {
     friends
@@ -13,20 +16,45 @@ class App extends Component {
   removeFriend = id => {
     // Filter this.state.friends for friends with an id not equal to the id being removed
     // eslint-disable-next-line array-callback-return
-    console.log("HELLO?");
+    console.log("HELLO?" + id);
     const friends = this.state.friends.map(friend => { 
       if (friend.id === id) {
-      friend.clicked = true; 
+        if (!friend.clicked) {
+      friend.clicked = true;
       return friend;
-    }
+        }
+        else {
+            friend.double = true;
+            return friend
+          }
+      }
     else {
       return friend;
     }
     });
-    // Set this.state.friends equal to the new friends array
-    this.setState({ friends });
-    console.log("friends" + friends);
-    this.render();
+
+    const test = this.state.friends.filter(friend => friend.double !== true);
+
+    const help = this.state.friends.map(friend => {
+      console.log(JSON.stringify(friend));
+      return friend;
+    });
+    
+    if (test.length === friends.length) {
+      // Set this.state.friends equal to the new friends array
+      this.setState({ friends });
+      this.render();
+    }
+    else {
+      const friends = this.state.friends.map(friend => {
+        friend.clicked = false;
+        friend.double = false;
+        return friend;
+      });
+      this.setState({ friends });
+      this.render();
+    }
+
   };
 
   shuffleArray = array => {
@@ -57,6 +85,7 @@ class App extends Component {
             occupation={friend.occupation}
             location={friend.location}
             clicked={friend.clicked}
+            double={friend.double}
           />
         ))}
       </Wrapper>
